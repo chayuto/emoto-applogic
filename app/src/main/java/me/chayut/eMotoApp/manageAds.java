@@ -1,5 +1,8 @@
 package me.chayut.eMotoApp;
 
+
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -7,22 +10,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 
-public class manageAds extends ActionBarActivity {
+public class manageAds extends ActionBarActivity implements adsDetailsFragment.OnFragmentInteractionListener {
 
     eMotoCell myMotoCell = new eMotoCell();
     eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
-    private ArrayList<String> myStringArray = new ArrayList<String>();
+
+
+
+    //ads array for ListView
+    private ArrayList<eMotoAds> adsArray = new ArrayList<eMotoAds>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +93,8 @@ public class manageAds extends ActionBarActivity {
             //completion handler
 
            for(Map.Entry<String, eMotoAds> entry: myAdsCollection.map.entrySet())  {
-               myStringArray.add(entry.getValue().AdsId());
-               Log.d("Application*", entry.getKey());
+               adsArray.add(entry.getValue());
+               Log.d("Application*", entry.getValue().getAdsThumbnailURL());
             }
 
             fillListView();
@@ -98,10 +103,36 @@ public class manageAds extends ActionBarActivity {
 
     private void fillListView(){
         ListView listview = (ListView) findViewById(R.id.adsListView);
-
-        ArrayAdapter<String> codeLearnArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, myStringArray);
-
-        listview.setAdapter(codeLearnArrayAdapter);
+        eMotoAdsArrayAdapter myAdapter = new eMotoAdsArrayAdapter(this,R.layout.adsview_item_row,adsArray);
+        listview.setAdapter(myAdapter);
+        listview .setOnItemClickListener(mOnClickListener);
     }
+
+
+    protected void onListItemClick(ListView l, View v, int position, long id) { }
+
+    private AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            onListItemClick((ListView) parent, v, position, id);
+
+            Toast.makeText(getApplicationContext(),String.format("Item Clicked %s",adsArray.get(position).AdsDescription()),
+                    Toast.LENGTH_SHORT).show();
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            adsDetailsFragment fragment = adsDetailsFragment.newInstance(adsArray.get(position).AdsDescription(),adsArray.get(position).AdsId());
+
+            fragmentTransaction.replace(R.id.adsDetailsFragment, fragment);
+            fragmentTransaction.addToBackStack(null);
+
+            fragmentTransaction.commit();
+
+        }
+    };
+
+    public void onFragmentInteraction(){
+
+    }
+
 
 }

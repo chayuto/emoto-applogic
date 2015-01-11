@@ -36,4 +36,22 @@ public class eMotoAds {
         }
         return Id;
     }
+
+    public String getAdsImageURL(){
+        String URL = null;
+        try {
+            URL = adsJSONObject.getString("Url");
+        }
+        catch (JSONException ex){
+            ex.printStackTrace();
+        }
+        return URL;
+    }
+
+    public String getAdsThumbnailURL(){
+        String s = getAdsImageURL();
+        String ThumbnailURL = s.substring(0,s.length()-4) + "_t.jpg";
+
+        return ThumbnailURL;
+    }
 }
