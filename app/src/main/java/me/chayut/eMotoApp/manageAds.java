@@ -1,8 +1,6 @@
 package me.chayut.eMotoApp;
 
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -19,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class manageAds extends ActionBarActivity implements adsDetailsFragment.OnFragmentInteractionListener {
+public class manageAds extends ActionBarActivity  {
 
     eMotoCell myMotoCell = new eMotoCell();
     eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
@@ -41,7 +39,7 @@ public class manageAds extends ActionBarActivity implements adsDetailsFragment.O
         myMotoCell.deviceLatitude = "-33.7238297";
         myMotoCell.deviceLongitude = "151.1220244";
 
-        myAdsCollection.myEMotoCell = myMotoCell;
+        myAdsCollection.eMotoCell = myMotoCell;
         myAdsCollection.token = token;
 
         new getAdsCollectionTask().execute();
@@ -70,6 +68,38 @@ public class manageAds extends ActionBarActivity implements adsDetailsFragment.O
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    private void fillListView(){
+        ListView listview = (ListView) findViewById(R.id.adsListView);
+        eMotoAdsArrayAdapter myAdapter = new eMotoAdsArrayAdapter(this,R.layout.adsview_item_row,adsArray);
+        listview.setAdapter(myAdapter);
+        listview .setOnItemClickListener(mOnClickListener);
+    }
+
+
+    protected void onListItemClick(ListView l, View v, int position, long id) { }
+
+    private AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            onListItemClick((ListView) parent, v, position, id);
+
+            Toast.makeText(getApplicationContext(),String.format("Item Clicked %s",adsArray.get(position).description()),
+                    Toast.LENGTH_SHORT).show();
+
+            if(adsArray.get(position).isApproved()) {
+                new UnapproveTask().execute(adsArray.get(position).id());
+            }
+            else
+            {
+                new ApproveTask().execute(adsArray.get(position).id());
+            }
+
+        }
+    };
+
+    //region Asynctasks
+
     private class getAdsCollectionTask extends AsyncTask<Object, Void, String> {
 
         @Override
@@ -91,48 +121,66 @@ public class manageAds extends ActionBarActivity implements adsDetailsFragment.O
         protected void onPostExecute(String result) {
             Log.d("AyncThread", "onPostExecute");
             //completion handler
-
-           for(Map.Entry<String, eMotoAds> entry: myAdsCollection.map.entrySet())  {
-               adsArray.add(entry.getValue());
-               Log.d("Application*", entry.getValue().getAdsThumbnailURL());
+            adsArray.clear();
+            for(Map.Entry<String, eMotoAds> entry: myAdsCollection.adsHashMap.entrySet())  {
+                adsArray.add(entry.getValue());
+                Log.d("Application*", entry.getValue().getAdsThumbnailURL());
             }
 
             fillListView();
         }
     }
 
-    private void fillListView(){
-        ListView listview = (ListView) findViewById(R.id.adsListView);
-        eMotoAdsArrayAdapter myAdapter = new eMotoAdsArrayAdapter(this,R.layout.adsview_item_row,adsArray);
-        listview.setAdapter(myAdapter);
-        listview .setOnItemClickListener(mOnClickListener);
-    }
+    private class ApproveTask extends AsyncTask<String, Void, String> {
 
-
-    protected void onListItemClick(ListView l, View v, int position, long id) { }
-
-    private AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            onListItemClick((ListView) parent, v, position, id);
-
-            Toast.makeText(getApplicationContext(),String.format("Item Clicked %s",adsArray.get(position).description()),
-                    Toast.LENGTH_SHORT).show();
-
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            adsDetailsFragment fragment = adsDetailsFragment.newInstance(adsArray.get(position).description(),adsArray.get(position).id());
-
-            //fragmentTransaction.replace(R.id.adsDetailsFragment, fragment);
-            //fragmentTransaction.addToBackStack(null);
-
-            //fragmentTransaction.commit();
+        @Override
+        protected void onPreExecute()
+        {
 
         }
-    };
-
-    public void onFragmentInteraction(){
-
+        @Override
+        protected String doInBackground(String... prams) {
+            try {
+                myAdsCollection.approveAdsWithID(prams[0]);
+                return "put the background thread function here";
+            } catch (Exception ex) {
+                return "Unable to retrieve web page. URL may be invalid.";
+            }
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("AyncThread", "onPostExecute");
+            new getAdsCollectionTask().execute();
+            //completion handler
+        }
     }
 
+    private class UnapproveTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute()
+        {
+
+        }
+        @Override
+        protected String doInBackground(String... prams) {
+            try {
+                myAdsCollection.unapproveAdsWithID(prams[0]);
+                return "put the background thread function here";
+            } catch (Exception ex) {
+                return "Unable to retrieve web page. URL may be invalid.";
+            }
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("AyncThread", "onPostExecute");
+            new getAdsCollectionTask().execute();
+            //completion handler
+        }
+    }
+
+    //endregion
 
 }

@@ -15,13 +15,16 @@ eMotoLoginResponse Class:
 eMotoAdsCollection Class: 
 
     //properties 
-    public eMotoCell myEMotoCell;
+    public eMotoCell eMotoCell;
     public String token;
     public Map<String,eMotoAds> map =  new HashMap<String,eMotoAds>();
 
     //methods
-    public void getAdsCollection () //fill in Hashmap with eMotoAds object from server, Hashmap key is AdsIds
+    public eMotoAds getAdsWithId (String id);
+    public boolean removeAdsWithId (String id);
+    public void getAdsCollection (); //fill in Hashmap with eMotoAds object from server, eMotoCell and token must be set before calling this function
     public boolean approveAdsID(String adsID);
+    public boolean unapproveAdsWithID(String adsID);
 
 
 eMotoAds Class:
@@ -29,11 +32,12 @@ eMotoAds Class:
     //methods
     public String id();
     public String scheduleAssetId();
+    public String isApprovedStr();
+    public String scheduleAssetId()
     public String getAdsImageURL();
     public String getAdsThumbnailURL();
 
-
-Last modified 9:27pm 12/01/15
+Last modified 12:27pm 12/01/15
 
 
 Change Logs:

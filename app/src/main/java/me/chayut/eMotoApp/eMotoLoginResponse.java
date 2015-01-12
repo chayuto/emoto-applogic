@@ -9,5 +9,6 @@ public class eMotoLoginResponse {
     public String token;
     public String idle;
     public String username;
+    public String credential; //temporary, unsafe
 
 }

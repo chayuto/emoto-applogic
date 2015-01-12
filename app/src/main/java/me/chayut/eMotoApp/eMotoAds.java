@@ -49,6 +49,22 @@ public class eMotoAds {
         return Id;
     }
 
+    public String isApprovedStr() {
+
+        String Id = null;
+        try {
+            Id = adsJSONObject.getString("Approved");
+        }
+        catch (JSONException ex){
+            ex.printStackTrace();
+        }
+        return Id;
+    }
+
+    public Boolean isApproved(){
+        return Boolean.parseBoolean(isApprovedStr());
+    }
+
     public String getAdsImageURL(){
         String URL = null;
         try {

@@ -21,11 +21,6 @@
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/button" />
 
-    <fragment
-        android:name="me.chayut.eMotoApp.adsDetailsFragment"
-        android:id="@+id/adsDetailsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 
 </RelativeLayout>

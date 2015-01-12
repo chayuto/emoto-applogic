@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -30,7 +31,29 @@ public class eMotoUtility
 {
     public static eMotoLoginResponse performLogin ( String username, String password){
 
+        eMotoLoginResponse mLoginResponse = new eMotoLoginResponse();
+        mLoginResponse.idle = null;
+        mLoginResponse.success = false;
+        mLoginResponse.token= null;
 
+        try {
+            String text = String.format("%s:%s", username, password);
+
+            byte[] data = text.getBytes("UTF-8");
+
+            String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+
+            mLoginResponse = performLoginWithCredential(base64);
+            mLoginResponse.username = username;
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return mLoginResponse;
+    }
+
+    public static eMotoLoginResponse performLoginWithCredential(String base64)
+    {
         eMotoLoginResponse mLoginResponse = new eMotoLoginResponse();
 
         BufferedReader rd  = null;
@@ -38,15 +61,9 @@ public class eMotoUtility
         mLoginResponse.idle = null;
         mLoginResponse.success = false;
         mLoginResponse.token= null;
-        mLoginResponse.username = username;
 
-        String LoginResponse = null;
         try {
             bypassSSLAllCertificate();
-
-            String text = String.format("%s:%s",username,password);
-            byte[] data = text.getBytes("UTF-8");
-            String base64 = Base64.encodeToString(data, Base64.DEFAULT);
 
             URL u = new URL(String.format("https://emotovate.com/api/security/authenticate/%s",base64));
             HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
@@ -74,6 +91,7 @@ public class eMotoUtility
                     mLoginResponse.token  = jObj.getString("token");
                     mLoginResponse.idle = jObj.getString("idle");
                     mLoginResponse.success = true;
+                    mLoginResponse.credential = base64;
 
                     break;
                 case 401:
@@ -83,19 +101,18 @@ public class eMotoUtility
 
 
             }
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
+        }
+        catch (MalformedURLException ex) {
+        ex.printStackTrace();
         }
         catch (IOException ex) {
             ex.printStackTrace();
         }
-
         catch (JSONException ex){
             ex.printStackTrace();
         }
         return mLoginResponse;
     }
-
     public static void bypassSSLAllCertificate(){
         try {
 
