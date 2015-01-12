@@ -42,6 +42,7 @@ public class eMotoUtility
 
         String LoginResponse = null;
         try {
+            bypassSSLAllCertificate();
 
             String text = String.format("%s:%s",username,password);
             byte[] data = text.getBytes("UTF-8");
