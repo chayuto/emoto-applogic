@@ -84,7 +84,7 @@ public class eMotoAdsArrayAdapter extends ArrayAdapter<eMotoAds> {
         eMotoAds i = objects.get(position);
 
         viewholder.imageView.setImageResource(R.drawable.em_logo_120);
-        viewholder.textView.setText(i.AdsDescription());
+        viewholder.textView.setText(i.description());
         viewholder.adsImageURL = i.getAdsThumbnailURL();
         new ImageThumbnailDownloadTask().execute(viewholder);
 

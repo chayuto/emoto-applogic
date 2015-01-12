@@ -13,7 +13,7 @@ public class eMotoAds {
     {
         adsJSONObject = ads;
     }
-    public String AdsDescription() {
+    public String description() {
 
         String des = null;
         try {
@@ -25,11 +25,23 @@ public class eMotoAds {
         return des;
     }
 
-    public String AdsId() {
+    public String id() {
 
         String Id = null;
         try {
             Id = adsJSONObject.getString("Id");
+        }
+        catch (JSONException ex){
+            ex.printStackTrace();
+        }
+        return Id;
+    }
+
+    public String scheduleAssetId() {
+
+        String Id = null;
+        try {
+            Id = adsJSONObject.getString("ScheduleAssetId");
         }
         catch (JSONException ex){
             ex.printStackTrace();

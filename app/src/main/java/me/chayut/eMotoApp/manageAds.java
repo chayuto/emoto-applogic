@@ -115,17 +115,17 @@ public class manageAds extends ActionBarActivity implements adsDetailsFragment.O
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
             onListItemClick((ListView) parent, v, position, id);
 
-            Toast.makeText(getApplicationContext(),String.format("Item Clicked %s",adsArray.get(position).AdsDescription()),
+            Toast.makeText(getApplicationContext(),String.format("Item Clicked %s",adsArray.get(position).description()),
                     Toast.LENGTH_SHORT).show();
 
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            adsDetailsFragment fragment = adsDetailsFragment.newInstance(adsArray.get(position).AdsDescription(),adsArray.get(position).AdsId());
+            adsDetailsFragment fragment = adsDetailsFragment.newInstance(adsArray.get(position).description(),adsArray.get(position).id());
 
-            fragmentTransaction.replace(R.id.adsDetailsFragment, fragment);
-            fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.replace(R.id.adsDetailsFragment, fragment);
+            //fragmentTransaction.addToBackStack(null);
 
-            fragmentTransaction.commit();
+            //fragmentTransaction.commit();
 
         }
     };
