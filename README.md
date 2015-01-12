@@ -1,6 +1,7 @@
 eMotoApp Logic Backend:
 
 eMotoUtility Class:
+    
     public static eMotoLoginResponse performLogin (String username, String password); //Login in with server: 
 
 eMotoLoginResponse Class: 
@@ -19,8 +20,8 @@ eMotoAdsCollection Class:
     public Map<String,eMotoAds> map =  new HashMap<String,eMotoAds>();
 
     //methods
-   public void getAdsCollection () //fill in Hashmap with eMotoAds object from server, Hashmap key is AdsIds
-   public boolean approveAdsID(String adsID);
+    public void getAdsCollection () //fill in Hashmap with eMotoAds object from server, Hashmap key is AdsIds
+    public boolean approveAdsID(String adsID);
 
 
 eMotoAds Class:
@@ -32,4 +33,4 @@ eMotoAds Class:
     public String getAdsThumbnailURL();
 
 
-//Last modified 9:27pm 12/01/15
+Last modified 9:27pm 12/01/15
