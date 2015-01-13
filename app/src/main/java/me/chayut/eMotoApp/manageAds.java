@@ -21,7 +21,7 @@ public class manageAds extends ActionBarActivity  {
 
     eMotoCell myMotoCell = new eMotoCell();
     eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
-
+    String loginToken;
 
 
     //ads array for ListView
@@ -35,12 +35,13 @@ public class manageAds extends ActionBarActivity  {
         Intent intent = getIntent();
         String token = intent.getExtras().getString("token");
 
+        loginToken = token;
         myMotoCell.deviceID = "00000000";
         myMotoCell.deviceLatitude = "-33.7238297";
         myMotoCell.deviceLongitude = "151.1220244";
 
         myAdsCollection.eMotoCell = myMotoCell;
-        myAdsCollection.token = token;
+        myAdsCollection.token = loginToken;
 
         new getAdsCollectionTask().execute();
     }
@@ -109,12 +110,11 @@ public class manageAds extends ActionBarActivity  {
         }
         @Override
         protected String doInBackground(Object... prams) {
-            try {
-                myAdsCollection.getAdsCollection();
-                return "put the background thread function here";
-            } catch (Exception ex) {
-                return "Unable to retrieve web page. URL may be invalid.";
-            }
+
+                  myMotoCell.putDeviceOnServer(loginToken);
+                  myAdsCollection.getAdsCollection();
+            return "test";
+
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override

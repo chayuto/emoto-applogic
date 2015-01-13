@@ -17,14 +17,14 @@ eMotoLoginResponse Class:
     public boolean success;
     public String token;
     public String idle;
-    public String username
+    public String username;
 
 eMotoAdsCollection Class: 
 
     //properties 
     public eMotoCell eMotoCell;
     public String token;
-    public Map<String,eMotoAds> map =  new HashMap<String,eMotoAds>();
+    public Map<String,eMotoAds> adsHashMap =  new HashMap<String,eMotoAds>();
 
     //methods
     public eMotoAds getAdsWithId (String id);
@@ -53,6 +53,9 @@ eMotoCell Class:
     public String deviceID;
     public String deviceLatitude;
     public String deviceLongitude;
+
+    //method
+    public void putDeviceOnServer (String token);<Network>
 
 
 Change Logs:
