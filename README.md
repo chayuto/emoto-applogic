@@ -1,8 +1,15 @@
-eMotoApp Logic Backend:
+#################################
+#
+# eMotoApp Logic Backend
+#
+#################################
+
 
 eMotoUtility Class:
     
-    public static eMotoLoginResponse performLogin (String username, String password); //Login in with server: 
+    public static eMotoLoginResponse performLogin (String username, String password); //<Network> Login in with server:
+    public static eMotoLoginResponse performLoginWithCredential(String base64) //<TBC>
+    public static void bypassSSLAllCertificate();
 
 eMotoLoginResponse Class: 
 
@@ -22,13 +29,16 @@ eMotoAdsCollection Class:
     //methods
     public eMotoAds getAdsWithId (String id);
     public boolean removeAdsWithId (String id);
-    public void getAdsCollection (); //fill in Hashmap with eMotoAds object from server, eMotoCell and token must be set before calling this function
-    public boolean approveAdsID(String adsID);
-    public boolean unapproveAdsWithID(String adsID);
+    public void getAdsCollection (); //<Network> fill in Hashmap with eMotoAds object from server, eMotoCell and token must be set before calling this function
+    public boolean approveAdsID(String adsID); //<Network>
+    public boolean unapproveAdsWithID(String adsID); //<Network>
 
 
 eMotoAds Class:
-   
+
+    //property
+    public JSONObject adsJSONObject; //to be considered for change to primitive class
+
     //methods
     public String id();
     public String scheduleAssetId();
@@ -37,7 +47,12 @@ eMotoAds Class:
     public String getAdsImageURL();
     public String getAdsThumbnailURL();
 
-Last modified 12:27pm 12/01/15
+eMotoCell Class:
+
+    //property
+    public String deviceID;
+    public String deviceLatitude;
+    public String deviceLongitude;
 
 
 Change Logs:
