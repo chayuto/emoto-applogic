@@ -41,7 +41,7 @@ public class manageAds extends ActionBarActivity  {
         myMotoCell.deviceLongitude = "151.1220244";
 
         myAdsCollection.eMotoCell = myMotoCell;
-        myAdsCollection.token = loginToken;
+
 
         new getAdsCollectionTask().execute();
     }
@@ -89,11 +89,11 @@ public class manageAds extends ActionBarActivity  {
                     Toast.LENGTH_SHORT).show();
 
             if(adsArray.get(position).isApproved()) {
-                new UnapproveTask().execute(adsArray.get(position).id());
+                new UnapproveTask().execute(adsArray.get(position).id(),loginToken);
             }
             else
             {
-                new ApproveTask().execute(adsArray.get(position).id());
+                new ApproveTask().execute(adsArray.get(position).id(),loginToken);
             }
 
         }
@@ -112,7 +112,7 @@ public class manageAds extends ActionBarActivity  {
         protected String doInBackground(Object... prams) {
 
                   myMotoCell.putDeviceOnServer(loginToken);
-                  myAdsCollection.getAdsCollection();
+                  myAdsCollection.getAdsCollection(loginToken);
             return "test";
 
         }
@@ -141,7 +141,7 @@ public class manageAds extends ActionBarActivity  {
         @Override
         protected String doInBackground(String... prams) {
             try {
-                myAdsCollection.approveAdsWithID(prams[0]);
+                myAdsCollection.approveAdsWithID(prams[0],prams[1]);
                 return "put the background thread function here";
             } catch (Exception ex) {
                 return "Unable to retrieve web page. URL may be invalid.";
@@ -166,7 +166,7 @@ public class manageAds extends ActionBarActivity  {
         @Override
         protected String doInBackground(String... prams) {
             try {
-                myAdsCollection.unapproveAdsWithID(prams[0]);
+                myAdsCollection.unapproveAdsWithID(prams[0],prams[1]);
                 return "put the background thread function here";
             } catch (Exception ex) {
                 return "Unable to retrieve web page. URL may be invalid.";

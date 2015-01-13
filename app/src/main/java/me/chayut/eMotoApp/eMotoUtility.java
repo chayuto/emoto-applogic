@@ -42,9 +42,9 @@ public class eMotoUtility
             byte[] data = text.getBytes("UTF-8");
 
             String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+            mLoginResponse.credential = base64;
 
-            mLoginResponse = performLoginWithCredential(base64);
-            mLoginResponse.username = username;
+            performLoginWithLoginResponse(mLoginResponse);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -52,9 +52,8 @@ public class eMotoUtility
         return mLoginResponse;
     }
 
-    public static eMotoLoginResponse performLoginWithCredential(String base64)
+    public static void performLoginWithLoginResponse(eMotoLoginResponse mLoginResponse)
     {
-        eMotoLoginResponse mLoginResponse = new eMotoLoginResponse();
 
         BufferedReader rd  = null;
 
@@ -65,7 +64,7 @@ public class eMotoUtility
         try {
             bypassSSLAllCertificate();
 
-            URL u = new URL(String.format("https://emotovate.com/api/security/authenticate/%s",base64));
+            URL u = new URL(String.format("https://emotovate.com/api/security/authenticate/%s",mLoginResponse.credential));
             HttpsURLConnection c = (HttpsURLConnection) u.openConnection();
 
             c.setRequestMethod("POST");
@@ -91,7 +90,6 @@ public class eMotoUtility
                     mLoginResponse.token  = jObj.getString("token");
                     mLoginResponse.idle = jObj.getString("idle");
                     mLoginResponse.success = true;
-                    mLoginResponse.credential = base64;
 
                     break;
                 case 401:
@@ -111,8 +109,9 @@ public class eMotoUtility
         catch (JSONException ex){
             ex.printStackTrace();
         }
-        return mLoginResponse;
+
     }
+
     public static void bypassSSLAllCertificate(){
         try {
 

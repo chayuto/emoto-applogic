@@ -23,7 +23,6 @@ import javax.net.ssl.HttpsURLConnection;
 public class eMotoAdsCollection {
 
     public eMotoCell eMotoCell;
-    public String token;
     public Map<String,eMotoAds> adsHashMap =  new HashMap<String,eMotoAds>();
 
 
@@ -47,7 +46,7 @@ public class eMotoAdsCollection {
 
 
     //region network connection
-    public void getAdsCollection () {
+    public void getAdsCollection (String token) {
 
         BufferedReader rd  = null;
 
@@ -112,7 +111,7 @@ public class eMotoAdsCollection {
 
     }
 
-    public boolean approveAdsWithID(String adsID){
+    public boolean approveAdsWithID(String adsID,String token){
 
         BufferedReader rd  = null;
 
@@ -162,7 +161,7 @@ public class eMotoAdsCollection {
         return false;
     }
 
-    public boolean unapproveAdsWithID(String adsID){
+    public boolean unapproveAdsWithID(String adsID,String token){
 
         BufferedReader rd  = null;
 

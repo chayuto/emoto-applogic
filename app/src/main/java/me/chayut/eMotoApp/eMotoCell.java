@@ -30,7 +30,7 @@ public class eMotoCell {
 
         try {
             URL u = new URL(String.format("https://emotovate.com/api/devicetracking/add/%s",token));
-            String jsonString = String.format("{\"DeviceId\":\"%s\",\"LightSensor\":\"%s\",\"Longitude\":\"%s\",\"Latitude\":\"%s\",\"Temperature\":\"%s\"}","00000000","true","-33.8238395","151.1996951","24.3");
+            String jsonString = String.format("{\"DeviceId\":\"%s\",\"LightSensor\":\"%s\",\"Longitude\":\"%s\",\"Latitude\":\"%s\",\"Temperature\":\"%s\"}",deviceID,"true",deviceLongitude,deviceLatitude,"24.3");
             //String jsonString = String.format("{DeviceId:\"%s\",LightSensor:\"%s\",Longitude:\"%s\",Latitude:\"%s\",Temperature:\"%s\"}","00000000","true","-33.8238395","151.1996951","24.3");
             Log.d("eMotoCell:", String.format("JSON:%s", jsonString));
             HttpsURLConnection c = (HttpsURLConnection) u.openConnection();

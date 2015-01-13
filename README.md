@@ -8,10 +8,10 @@
 eMotoUtility Class:
     
     public static eMotoLoginResponse performLogin (String username, String password); //<Network> Login in with server:
-    public static eMotoLoginResponse performLoginWithCredential(String base64) //<TBC>
+    public static void performLoginWithLoginResponse(eMotoLoginResponse mLoginResponse); //<Network>
     public static void bypassSSLAllCertificate();
 
-eMotoLoginResponse Class: 
+eMotoLoginResponse Class <implements parcelable>:
 
     //Properties
     public boolean success;
@@ -29,9 +29,9 @@ eMotoAdsCollection Class:
     //methods
     public eMotoAds getAdsWithId (String id);
     public boolean removeAdsWithId (String id);
-    public void getAdsCollection (); //<Network> fill in Hashmap with eMotoAds object from server, eMotoCell and token must be set before calling this function
-    public boolean approveAdsID(String adsID); //<Network>
-    public boolean unapproveAdsWithID(String adsID); //<Network>
+    public void getAdsCollection (String token)  //<Network>
+    public boolean approveAdsWithID(String adsID,String token); //<Network>
+    public boolean unapproveAdsWithID(String adsID,String token); //<Network>
 
 
 eMotoAds Class:
@@ -55,7 +55,7 @@ eMotoCell Class:
     public String deviceLongitude;
 
     //method
-    public void putDeviceOnServer (String token);<Network>
+    public void putDeviceOnServer (String token);//<Network>
 
 
 Change Logs:

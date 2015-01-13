@@ -114,6 +114,8 @@ public class MainActivity extends ActionBarActivity {
         myIntent.putExtra("token", value); //Optional parameters
         MainActivity.this.startActivity(myIntent);
 
+        Log.d("Application",String.format("user:%s",mLoginResponse.username));
+
     }
 
 
