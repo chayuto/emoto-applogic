@@ -1,6 +1,8 @@
 package me.chayut.eMotoApp;
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.util.Base64;
 import android.util.Log;
 
@@ -16,8 +18,7 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
+import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -164,20 +165,21 @@ public class eMotoUtility
     public static void startAutoReauthenticate (eMotoLoginResponse mLoginResponse) {
 
         try {
-            int corePoolSize = 2;
+            int corePoolSize = 1;
             //creates ScheduledThreadPoolExecutor object with number of thread 2
             ScheduledThreadPoolExecutor stpe = new ScheduledThreadPoolExecutor(corePoolSize);
             //starts runnable thread
             RunnableThread runThread = new eMotoUtility().new RunnableThread();
             runThread.mLoginResponse = mLoginResponse;
             int delay = Integer.parseInt(mLoginResponse.idle);
-            stpe.execute(runThread);
+            //stpe.execute(runThread);
 
             //starts callable thread that will start after delay minutes
-            ScheduledFuture sf = stpe.scheduleAtFixedRate(runThread,delay,delay,
-                    TimeUnit.MINUTES);
+            ScheduledFuture sf = stpe.scheduleAtFixedRate(runThread,delay,delay, TimeUnit.MINUTES);
+            //ScheduledFuture sf = stpe.scheduleAtFixedRate(runThread,10,10,TimeUnit.SECONDS);
 
-
+            //stpe.shutdown();
+            //sf.cancel(false);
             int activeCnt = stpe.getActiveCount();
             System.out.println("activeCnt:" + activeCnt);
             //stops all the threads in ScheduledThreadPoolExecutor
@@ -198,7 +200,34 @@ public class eMotoUtility
         @Override
         public void run() {
                 performLoginWithLoginResponse(mLoginResponse);
-                System.out.println("run:" + mLoginResponse.token);
+                System.out.println("runThread:" + mLoginResponse.token);
+        }
+    }
+
+
+    public void BluetoothThingy (){
+
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            // Device does not support Bluetooth
+            Log.d("BT:","Not support on this device");
+        }
+        else
+        {
+            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+            // If there are paired devices
+            if (pairedDevices.size() > 0) {
+                // Loop through paired devices
+                for (BluetoothDevice device : pairedDevices) {
+
+                    Log.d("BT:",device.getName()+","+device.getAddress());
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 }
