@@ -112,16 +112,16 @@ public class MainActivity extends ActionBarActivity {
 
         Intent myIntent = new Intent(MainActivity.this, manageAds.class);
         myIntent.putExtra("token", value); //Optional parameters
-        MainActivity.this.startActivity(myIntent);
 
-        Log.d("Application",String.format("user:%s",mLoginResponse.username));
+       // MainActivity.this.startActivity(myIntent);
+
+        eMotoUtility.startAutoReauthenticate(mLoginResponse);
 
     }
 
 
     private void loginUnauthorizedAlert(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        //builder1.setTitle("Unauthoried");
         builder1.setMessage("Invalid Username/Password");
         builder1.setCancelable(true);
         AlertDialog alert11 = builder1.create();

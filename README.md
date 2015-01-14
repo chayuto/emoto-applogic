@@ -9,6 +9,7 @@ eMotoUtility Class:
     
     public static eMotoLoginResponse performLogin (String username, String password); //<Network> Login in with server:
     public static void performLoginWithLoginResponse(eMotoLoginResponse mLoginResponse); //<Network>
+    public static void startAutoReauthenticate (eMotoLoginResponse mLoginResponse); //<Background> <Testing> should be called in main activity
     public static void bypassSSLAllCertificate();
 
 eMotoLoginResponse Class <implements parcelable>:
