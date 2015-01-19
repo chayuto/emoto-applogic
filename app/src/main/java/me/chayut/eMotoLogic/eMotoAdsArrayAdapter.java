@@ -1,4 +1,4 @@
-package me.chayut.eMotoApp;
+package me.chayut.eMotoLogic;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import me.chayut.eMotoApp.R;
 
 /**
  * Created by chayut on 8/01/15.

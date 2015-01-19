@@ -10,6 +10,7 @@ eMotoUtility Class:
     public static eMotoLoginResponse performLogin (String username, String password); //<Network> Login in with server:
     public static void performLoginWithLoginResponse(eMotoLoginResponse mLoginResponse); //<Network>
     public static void startAutoReauthenticate (eMotoLoginResponse mLoginResponse); //<Background> <Testing> should be called in main activity
+
     public static void bypassSSLAllCertificate();
 
 eMotoLoginResponse Class <implements parcelable>:
@@ -19,6 +20,7 @@ eMotoLoginResponse Class <implements parcelable>:
     public String token;
     public String idle;
     public String username;
+    public String credential; //temporary, unsafe
 
 eMotoAdsCollection Class: 
 
@@ -37,8 +39,8 @@ eMotoAdsCollection Class:
 
 eMotoAds Class:
 
-    //property
-    public JSONObject adsJSONObject; //to be considered for change to primitive class
+    //Constructor
+    public eMotoAds(JSONObject ads);
 
     //methods
     public String id();

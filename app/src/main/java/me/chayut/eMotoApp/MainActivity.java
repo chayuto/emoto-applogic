@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-
+import me.chayut.eMotoLogic.eMotoLoginResponse;
+import me.chayut.eMotoLogic.eMotoUtility;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -77,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(Object... prams) {
             try {
-                mLoginResponse = eMotoUtility.performLogin(username,password);
+                mLoginResponse = eMotoUtility.performLogin(username, password);
 
                 return "put the background thread function here";
             } catch (Exception ex) {
@@ -113,7 +114,7 @@ public class MainActivity extends ActionBarActivity {
         Intent myIntent = new Intent(MainActivity.this, manageAds.class);
         myIntent.putExtra("token", value); //Optional parameters
 
-       // MainActivity.this.startActivity(myIntent);
+        MainActivity.this.startActivity(myIntent);
 
         eMotoUtility.startAutoReauthenticate(mLoginResponse);
 

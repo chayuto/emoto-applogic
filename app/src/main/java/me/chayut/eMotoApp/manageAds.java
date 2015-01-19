@@ -16,6 +16,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Map;
 
+import me.chayut.eMotoLogic.eMotoAds;
+import me.chayut.eMotoLogic.eMotoAdsArrayAdapter;
+import me.chayut.eMotoLogic.eMotoAdsCollection;
+import me.chayut.eMotoLogic.eMotoCell;
+
 
 public class manageAds extends ActionBarActivity  {
 

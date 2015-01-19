@@ -1,4 +1,4 @@
-package me.chayut.eMotoApp;
+package me.chayut.eMotoLogic;
 
 import android.os.Parcel;
 import android.os.Parcelable;

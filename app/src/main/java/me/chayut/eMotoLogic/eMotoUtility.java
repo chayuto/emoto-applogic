@@ -1,4 +1,4 @@
-package me.chayut.eMotoApp;
+package me.chayut.eMotoLogic;
 
 
 import android.util.Base64;
@@ -16,8 +16,6 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;

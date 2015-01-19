@@ -1,4 +1,4 @@
-package me.chayut.eMotoApp;
+package me.chayut.eMotoLogic;
 
 import android.util.Log;
 
