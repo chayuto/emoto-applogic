@@ -61,4 +61,9 @@ eMotoCell Class:
     public void putDeviceOnServer (String token);//<Network>
 
 
+eMotoAssetLibrary Class:
+
+    //method
+    Bitmap getThumbnail (eMotoAds ads)
+
 Change Logs:

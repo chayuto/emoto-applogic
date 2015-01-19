@@ -30,8 +30,7 @@ public class eMotoAdsArrayAdapter extends ArrayAdapter<eMotoAds> {
     // declaring our ArrayList of items
     private ArrayList<eMotoAds> objects;
     private LayoutInflater inflater;
-
-
+    private eMotoAssetLibrary mEMotoAssetLibrary = new eMotoAssetLibrary();
 
     /* here we must override the constructor for ArrayAdapter
     * the only variable we care about now is ArrayList<Item> objects,
@@ -48,8 +47,8 @@ public class eMotoAdsArrayAdapter extends ArrayAdapter<eMotoAds> {
     private static class ViewHolder {
         ImageView imageView;
         TextView textView;
-        String adsImageURL;
         Bitmap bitmap;
+        eMotoAds ads;
     }
 
 
@@ -87,7 +86,7 @@ public class eMotoAdsArrayAdapter extends ArrayAdapter<eMotoAds> {
 
         viewholder.imageView.setImageResource(R.drawable.em_logo_120);
         viewholder.textView.setText(i.description());
-        viewholder.adsImageURL = i.getAdsThumbnailURL();
+        viewholder.ads = i;
         new ImageThumbnailDownloadTask().execute(viewholder);
 
         // the view must be returned to our activity
@@ -102,23 +101,13 @@ public class eMotoAdsArrayAdapter extends ArrayAdapter<eMotoAds> {
 
             // TODO Auto-generated method stub
 
-            //load image directly
 
             ViewHolder viewHolder = params[0];
-            try {
 
-                URL imageURL = new URL(viewHolder.adsImageURL);
+            //load image directly
+            viewHolder.bitmap = mEMotoAssetLibrary.getThumbnail(viewHolder.ads);
 
-                viewHolder.bitmap = BitmapFactory.decodeStream(imageURL.openStream());
 
-            } catch (IOException e) {
-
-                // TODO: handle exception
-
-                Log.e("error", "Downloading Image Failed");
-
-                viewHolder.bitmap = null;
-            }
             return viewHolder;
         }
 

@@ -26,7 +26,7 @@ public class eMotoAdsCollection {
     public Map<String,eMotoAds> adsHashMap =  new HashMap<String,eMotoAds>();
 
 
-    //region ads mangement
+    //region ads management
     public eMotoAds getAdsWithId (String id)
     {
         return  adsHashMap.get(id);
