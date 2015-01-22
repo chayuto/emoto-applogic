@@ -112,11 +112,9 @@ public class MainActivity extends ActionBarActivity {
     private void loginSuccessful (){
 
         Intent myIntent = new Intent(MainActivity.this, manageAds.class);
-        myIntent.putExtra("token", value); //Optional parameters
+        myIntent.putExtra("eMotoLoginResponse", mLoginResponse); //Optional parameters
 
         MainActivity.this.startActivity(myIntent);
-
-        eMotoUtility.startAutoReauthenticate(mLoginResponse);
 
     }
 

@@ -16,9 +16,6 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -159,44 +156,5 @@ public class eMotoUtility
         }
     }
 
-    public static void startAutoReauthenticate (eMotoLoginResponse mLoginResponse) {
 
-        try {
-            int corePoolSize = 2;
-            //creates ScheduledThreadPoolExecutor object with number of thread 2
-            ScheduledThreadPoolExecutor stpe = new ScheduledThreadPoolExecutor(corePoolSize);
-            //starts runnable thread
-            RunnableThread runThread = new eMotoUtility().new RunnableThread();
-            runThread.mLoginResponse = mLoginResponse;
-            int delay = Integer.parseInt(mLoginResponse.idle);
-            stpe.execute(runThread);
-
-            //starts callable thread that will start after delay minutes
-            ScheduledFuture sf = stpe.scheduleAtFixedRate(runThread,delay,delay,
-                    TimeUnit.MINUTES);
-
-
-            int activeCnt = stpe.getActiveCount();
-            System.out.println("activeCnt:" + activeCnt);
-            //stops all the threads in ScheduledThreadPoolExecutor
-            //stpe.shutdownNow();
-            //System.out.println(stpe.isShutdown());
-        }
-
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
-
-    }
-    //runnable thread
-    class RunnableThread implements Runnable {
-
-        public eMotoLoginResponse mLoginResponse;
-        @Override
-        public void run() {
-                performLoginWithLoginResponse(mLoginResponse);
-                System.out.println("run:" + mLoginResponse.token);
-        }
-    }
 }

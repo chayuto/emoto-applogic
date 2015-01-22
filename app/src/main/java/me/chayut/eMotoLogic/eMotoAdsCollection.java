@@ -86,7 +86,7 @@ public class eMotoAdsCollection {
 
                     for(Map.Entry<String, eMotoAds> entry: adsHashMap.entrySet())  {
 
-                        Log.d("Application", entry.getValue().id());
+                        Log.d("Application", "Ads: " + entry.getValue().id());
                     }
 
                     break;
@@ -191,7 +191,7 @@ public class eMotoAdsCollection {
                         rd  = new BufferedReader(new InputStreamReader(c.getInputStream()));
 
                         String json = rd.readLine();
-                        Log.d("Application:",json);
+                        Log.d("Application:","Ads" + json);
                         break;
                     case 401:
                         Log.d("Application:","Server unauthorized");

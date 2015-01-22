@@ -40,5 +40,10 @@ public class eMotoAssetLibrary {
         return adsThumbnail;
     }
 
+    public void clearAssetLibrary(){
+        adsHashMap.clear();
+    }
+
+
 
 }

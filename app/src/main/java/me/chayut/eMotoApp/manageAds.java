@@ -20,13 +20,16 @@ import me.chayut.eMotoLogic.eMotoAds;
 import me.chayut.eMotoLogic.eMotoAdsArrayAdapter;
 import me.chayut.eMotoLogic.eMotoAdsCollection;
 import me.chayut.eMotoLogic.eMotoCell;
+import me.chayut.eMotoLogic.eMotoLogic;
+import me.chayut.eMotoLogic.eMotoLoginResponse;
 
 
 public class manageAds extends ActionBarActivity  {
 
+    eMotoLogic mLogic = new eMotoLogic(this);
     eMotoCell myMotoCell = new eMotoCell();
     eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
-    String loginToken;
+    eMotoLoginResponse mLoginResponse;
 
 
     //ads array for ListView
@@ -38,16 +41,15 @@ public class manageAds extends ActionBarActivity  {
         setContentView(R.layout.activity_manage_ads);
 
         Intent intent = getIntent();
-        String token = intent.getExtras().getString("token");
+        mLoginResponse = intent.getExtras().getParcelable("eMotoLoginResponse");
 
-        loginToken = token;
+        mLogic.startAutoReauthenticate(mLoginResponse);
+
         myMotoCell.deviceID = "00000000";
         myMotoCell.deviceLatitude = "-33.7238297";
         myMotoCell.deviceLongitude = "151.1220244";
 
         myAdsCollection.eMotoCell = myMotoCell;
-
-
         new getAdsCollectionTask().execute();
     }
 
@@ -94,11 +96,11 @@ public class manageAds extends ActionBarActivity  {
                     Toast.LENGTH_SHORT).show();
 
             if(adsArray.get(position).isApproved()) {
-                new UnapproveTask().execute(adsArray.get(position).id(),loginToken);
+                new UnapproveTask().execute(adsArray.get(position).id(),mLoginResponse.token);
             }
             else
             {
-                new ApproveTask().execute(adsArray.get(position).id(),loginToken);
+                new ApproveTask().execute(adsArray.get(position).id(),mLoginResponse.token);
             }
 
         }
@@ -116,8 +118,10 @@ public class manageAds extends ActionBarActivity  {
         @Override
         protected String doInBackground(Object... prams) {
 
-                  myMotoCell.putDeviceOnServer(loginToken);
-                  myAdsCollection.getAdsCollection(loginToken);
+                  myMotoCell.putDeviceOnServer(mLoginResponse.token);
+                    //Log.d("debug",mLoginResponse.token);
+                  myAdsCollection.getAdsCollection(mLoginResponse.token);
+
             return "test";
 
         }
@@ -129,7 +133,7 @@ public class manageAds extends ActionBarActivity  {
             adsArray.clear();
             for(Map.Entry<String, eMotoAds> entry: myAdsCollection.adsHashMap.entrySet())  {
                 adsArray.add(entry.getValue());
-                Log.d("Application*", entry.getValue().getAdsThumbnailURL());
+                //Log.d("Application*", entry.getValue().getAdsThumbnailURL());
             }
 
             fillListView();

@@ -8,11 +8,19 @@ Note:
 Network - method should not be call in main Thread, use ASync Task or launch new Thread
 Background - method spawn new background worker thread, method should not be called multiple times
 
+##eMotoLogic Class:
+
+    //constructor
+    public eMotoLogic(Context mContext)
+
+    //methods
+    public void startAutoReauthenticate (eMotoLoginResponse mLoginResponse); //<Background> <Testing> should be called in main activity
+    public void stopAutoReauthenticate ();
+
 ##eMotoUtility Class:
     
     public static eMotoLoginResponse performLogin (String username, String password); //<Network> Login in with server:
     public static void performLoginWithLoginResponse(eMotoLoginResponse mLoginResponse); //<Network>
-    public static void startAutoReauthenticate (eMotoLoginResponse mLoginResponse); //<Background> <Testing> should be called in main activity
 
     public static void bypassSSLAllCertificate();
 
@@ -69,9 +77,7 @@ Background - method spawn new background worker thread, method should not be cal
 
     //method
     public Bitmap getThumbnail (eMotoAds ads); //<Network>
-
-
-
+    public void clearAssetLibrary()
 
 
 ##TODO:
