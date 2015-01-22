@@ -78,8 +78,8 @@ public class eMotoUtility
             c.setRequestProperty("Content-Type","application/json");
             c.setUseCaches(false);
             c.setAllowUserInteraction(false);
-            c.setConnectTimeout(3000);
-            c.setReadTimeout(3000);
+            c.setConnectTimeout(5000);
+            c.setReadTimeout(5000);
             c.connect();
             int status = c.getResponseCode();
 

@@ -4,8 +4,11 @@
 #
 #################################
 
+Note:
+Network - method should not be call in main Thread, use ASync Task or launch new Thread
+Background - method spawn new background worker thread, method should not be called multiple times
 
-eMotoUtility Class:
+##eMotoUtility Class:
     
     public static eMotoLoginResponse performLogin (String username, String password); //<Network> Login in with server:
     public static void performLoginWithLoginResponse(eMotoLoginResponse mLoginResponse); //<Network>
@@ -13,7 +16,7 @@ eMotoUtility Class:
 
     public static void bypassSSLAllCertificate();
 
-eMotoLoginResponse Class <implements parcelable>:
+##eMotoLoginResponse Class <implements parcelable>:
 
     //Properties
     public boolean success;
@@ -22,7 +25,7 @@ eMotoLoginResponse Class <implements parcelable>:
     public String username;
     public String credential; //temporary, unsafe
 
-eMotoAdsCollection Class: 
+##eMotoAdsCollection Class:
 
     //properties 
     public eMotoCell eMotoCell;
@@ -37,7 +40,7 @@ eMotoAdsCollection Class:
     public boolean unapproveAdsWithID(String adsID,String token); //<Network>
 
 
-eMotoAds Class:
+##eMotoAds Class:
 
     //Constructor
     public eMotoAds(JSONObject ads);
@@ -50,7 +53,7 @@ eMotoAds Class:
     public String getAdsImageURL();
     public String getAdsThumbnailURL();
 
-eMotoCell Class:
+##eMotoCell Class:
 
     //property
     public String deviceID;
@@ -61,9 +64,15 @@ eMotoCell Class:
     public void putDeviceOnServer (String token);//<Network>
 
 
-eMotoAssetLibrary Class:
+##eMotoAssetLibrary Class:
+ Asset Library handle download of the images and do internal caching.
 
     //method
-    Bitmap getThumbnail (eMotoAds ads)
+    public Bitmap getThumbnail (eMotoAds ads); //<Network>
 
-Change Logs:
+
+
+
+
+##TODO:
+-Location Manager
