@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:text="Test"
         android:id="@+id/button"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:onClick="btnPressed" />
 
     <ListView
         android:layout_width="wrap_content"

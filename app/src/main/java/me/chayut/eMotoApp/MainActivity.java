@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import me.chayut.eMotoLogic.eMotoLogic;
 import me.chayut.eMotoLogic.eMotoLoginResponse;
 import me.chayut.eMotoLogic.eMotoUtility;
 
@@ -78,6 +79,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(Object... prams) {
             try {
+                eMotoLogic.getCountryDataFromServer();
                 mLoginResponse = eMotoUtility.performLogin(username, password);
 
                 return "put the background thread function here";

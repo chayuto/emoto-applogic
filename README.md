@@ -17,12 +17,20 @@ Background - method spawn new background worker thread, method should not be cal
     public void startAutoReauthenticate (eMotoLoginResponse mLoginResponse); //<Background> <Testing> should be called in main activity
     public void stopAutoReauthenticate ();
 
+    public void startLocationService();
+    public void stopLocationService();
+
+
 ##eMotoUtility Class:
     
     public static eMotoLoginResponse performLogin (String username, String password); //<Network> Login in with server:
     public static void performLoginWithLoginResponse(eMotoLoginResponse mLoginResponse); //<Network>
 
     public static void bypassSSLAllCertificate();
+
+    public static JSONArray getCountryDataFromServer ();
+    public static JSONArray getCityDataFromServer (String countryIDorShortName);
+    public static JSONArray getZoneDataFromServer (String cityId);
 
 ##eMotoLoginResponse Class <implements parcelable>:
 
@@ -79,6 +87,3 @@ Background - method spawn new background worker thread, method should not be cal
     public Bitmap getThumbnail (eMotoAds ads); //<Network>
     public void clearAssetLibrary()
 
-
-##TODO:
--Location Manager

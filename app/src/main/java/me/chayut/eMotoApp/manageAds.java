@@ -192,4 +192,10 @@ public class manageAds extends ActionBarActivity  {
 
     //endregion
 
+    public void btnPressed (View view){
+
+        Log.d("Activity","Btn Pressed");
+
+        //mLogic.startLocationService();
+    }
 }

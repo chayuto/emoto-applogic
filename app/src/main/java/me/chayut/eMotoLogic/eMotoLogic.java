@@ -1,11 +1,16 @@
 package me.chayut.eMotoLogic;
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * Created by chayut on 22/01/15.
@@ -14,6 +19,8 @@ public class eMotoLogic {
 
     private ScheduledThreadPoolExecutor stpe;
     private LocationManager locationManager;
+    LocationListener locationListener;
+
     private Context mContext;
 
     public eMotoLogic(Context mContext){
@@ -68,9 +75,36 @@ public class eMotoLogic {
 
     public void startLocationService()
     {
+        // Define a listener that responds to location updates
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                Log.d("Location",location.toString());
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.d("Location","onStatusChanged : " + provider);
+            }
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
         // Get the location manager
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
     }
+
+    public void stopLocationService(){
+
+        locationManager.removeUpdates(locationListener);
+    }
+
+
 
 
 }

@@ -17,6 +17,7 @@ public class eMotoAds {
     {
         setAdsProperties(ads);
     }
+
     public String description() {
        return AdsDescription;
     }

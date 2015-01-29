@@ -91,7 +91,9 @@ public class eMotoAdsCollection {
 
                     break;
                 case 401:
-                    Log.d("Application:","Server unauthorized");
+                    rd  = new BufferedReader(new InputStreamReader(c.getErrorStream()));
+
+                    Log.d("Application:","Server unauthorized: " +rd.readLine());
                     break;
                 default:
 
