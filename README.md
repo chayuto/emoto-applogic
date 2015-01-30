@@ -9,17 +9,22 @@ Network - method should not be call in main Thread, use ASync Task or launch new
 Background - method spawn new background worker thread, method should not be called multiple times
 
 ##eMotoLogic Class:
+need to implementation of 'LogicCallBack' interface class in Activity.
 
     //constructor
-    public eMotoLogic(Context mContext)
+     public eMotoLogic(Context mContext,LogicCallBack callback);
 
     //methods
-    public void startAutoReauthenticate (eMotoLoginResponse mLoginResponse); //<Background> <Testing> should be called in main activity
+    public void startAutoReauthenticate (eMotoLoginResponse mLoginResponse); //<Background>  should be called in main activity
     public void stopAutoReauthenticate ();
 
     public void startLocationService();
     public void stopLocationService();
 
+##LogicCallBack Interface Class:
+
+    public void logicCallback ();
+    public void toastOnUI (String toastMessage);
 
 ##eMotoUtility Class:
     
@@ -28,9 +33,9 @@ Background - method spawn new background worker thread, method should not be cal
 
     public static void bypassSSLAllCertificate();
 
-    public static JSONArray getCountryDataFromServer ();
-    public static JSONArray getCityDataFromServer (String countryIDorShortName);
-    public static JSONArray getZoneDataFromServer (String cityId);
+    public static JSONArray getCountryDataFromServer (); //<Network>
+    public static JSONArray getCityDataFromServer (String countryIDorShortName); //<Network>
+    public static JSONArray getZoneDataFromServer (String cityId); //<Network>
 
 ##eMotoLoginResponse Class <implements parcelable>:
 

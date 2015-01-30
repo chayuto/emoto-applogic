@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(Object... prams) {
             try {
-                eMotoLogic.getCountryDataFromServer();
+                eMotoUtility.getCountryDataFromServer();
                 mLoginResponse = eMotoUtility.performLogin(username, password);
 
                 return "put the background thread function here";

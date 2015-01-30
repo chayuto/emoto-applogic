@@ -1,6 +1,7 @@
 package me.chayut.eMotoLogic;
 
 import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,14 +18,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class eMotoLogic {
 
+
     private ScheduledThreadPoolExecutor stpe;
     private LocationManager locationManager;
-    LocationListener locationListener;
-
+    private LocationListener locationListener;
+    private String provider;
+    private LogicCallBack logicCB;
     private Context mContext;
 
-    public eMotoLogic(Context mContext){
+
+    public eMotoLogic(Context mContext,LogicCallBack callback){
         this.mContext = mContext;
+        this.logicCB = callback;
     }
 
     public void startAutoReauthenticate (eMotoLoginResponse mLoginResponse) {
@@ -75,11 +80,13 @@ public class eMotoLogic {
 
     public void startLocationService()
     {
+        logicCB.toastOnUI("Location Service Started");
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.d("Location",location.toString());
+                logicCB.toastOnUI(String.format("Location: %f, %f : %f", location.getLatitude(),location.getLongitude(),location.getAccuracy()));
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -93,18 +100,20 @@ public class eMotoLogic {
         // Get the location manager
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
+        // Define the criteria how to select the locatioin provider -> use
+        // default
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
 
         // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);//.NETWORK_PROVIDER,
 
     }
 
     public void stopLocationService(){
-
         locationManager.removeUpdates(locationListener);
+
     }
-
-
-
 
 }

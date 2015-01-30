@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Map;
 
+import me.chayut.eMotoLogic.LogicCallBack;
 import me.chayut.eMotoLogic.eMotoAds;
 import me.chayut.eMotoLogic.eMotoAdsArrayAdapter;
 import me.chayut.eMotoLogic.eMotoAdsCollection;
@@ -24,12 +25,14 @@ import me.chayut.eMotoLogic.eMotoLogic;
 import me.chayut.eMotoLogic.eMotoLoginResponse;
 
 
-public class manageAds extends ActionBarActivity  {
+public class manageAds extends ActionBarActivity implements LogicCallBack {
 
-    eMotoLogic mLogic = new eMotoLogic(this);
+
+    eMotoLogic mLogic = new eMotoLogic(this,this);
     eMotoCell myMotoCell = new eMotoCell();
     eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
     eMotoLoginResponse mLoginResponse;
+
 
 
     //ads array for ListView
@@ -196,6 +199,18 @@ public class manageAds extends ActionBarActivity  {
 
         Log.d("Activity","Btn Pressed");
 
-        //mLogic.startLocationService();
+        mLogic.startLocationService();
     }
+
+    //Call back functions
+    public void logicCallback (){
+        Log.d("Activity","Call Back Triggered");
+
+    }
+    public void toastOnUI (String toastMessage){
+        Toast.makeText(getApplicationContext(),toastMessage,
+                Toast.LENGTH_SHORT).show();
+    }
+
+
 }
