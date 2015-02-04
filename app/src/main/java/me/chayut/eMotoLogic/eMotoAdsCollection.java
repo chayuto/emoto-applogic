@@ -51,7 +51,7 @@ public class eMotoAdsCollection {
         BufferedReader rd  = null;
 
         //TODO: remove SSL bypass
-        eMotoUtility.bypassSSLAllCertificate();
+        //eMotoUtility.bypassSSLAllCertificate();
 
         try {
             URL u = new URL(String.format("https://emotovate.com/api/ads/all/%s?deviceId=%s&lat=%s&lng=%s",token, eMotoCell.deviceID, eMotoCell.deviceLatitude, eMotoCell.deviceLongitude));
@@ -93,7 +93,7 @@ public class eMotoAdsCollection {
                 case 401:
                     rd  = new BufferedReader(new InputStreamReader(c.getErrorStream()));
 
-                    Log.d("Application:","Server unauthorized: " +rd.readLine());
+                    Log.d("Application:","Ads Server unauthorized: " +rd.readLine());
                     break;
                 default:
 

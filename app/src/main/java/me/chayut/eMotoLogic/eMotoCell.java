@@ -44,8 +44,8 @@ public class eMotoCell {
             c.setRequestProperty("Content-Type","application/json");
             //c.setRequestProperty("Accept", "application/json");
             c.setAllowUserInteraction(false);
-            c.setConnectTimeout(3000);
-            c.setReadTimeout(3000);
+            c.setConnectTimeout(5000);
+            c.setReadTimeout(5000);
 
             c.connect();
 

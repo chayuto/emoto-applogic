@@ -27,6 +27,8 @@ public class eMotoLogic {
     private Context mContext;
 
 
+
+
     public eMotoLogic(Context mContext,LogicCallBack callback){
         this.mContext = mContext;
         this.logicCB = callback;
@@ -107,7 +109,7 @@ public class eMotoLogic {
         Location location = locationManager.getLastKnownLocation(provider);
 
         // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);//.NETWORK_PROVIDER,
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);//.NETWORK_PROVIDER,.GPS_PROVIDER
 
     }
 
