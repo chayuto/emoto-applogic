@@ -10,6 +10,14 @@
         android:icon="@drawable/em_logo_sq"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <service
+            android:name="me.chayut.eMotoLogic.eMotoService"
+            android:label="eMotoService"
+            >
+        </service>
+
+
         <activity
             android:name="me.chayut.eMotoApp.MainActivity"
             android:label="@string/app_name" >
@@ -19,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <activity
             android:name="me.chayut.eMotoApp.manageAds"
             android:label="@string/title_activity_manage_ads"
@@ -28,11 +37,7 @@
                 android:value="me.chayut.eMotoApp.MainActivity" />
         </activity>
 
-        <service
-            android:name="me.chayut.eMotoLogic.eMotoService"
-            android:label="eMotoService"
-            >
-        </service>
+
 
 
     </application>

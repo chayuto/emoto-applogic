@@ -14,7 +14,7 @@ public class eMotoAds {
     private String AdsUrl;
     private String AdsExtension;
     private String AdsWidth;
-    private String AdsLength;
+    private String AdsHeight;
     private String AdsSize;
 
 
@@ -35,7 +35,7 @@ public class eMotoAds {
             AdsScheduleAssetId =ads.getString("ScheduleAssetId");
             AdsUrl =ads.getString("Url");
             AdsExtension = ads.getString("Extension");
-            AdsLength = ads.getString("Length");
+            AdsHeight = ads.getString("Height");
             AdsWidth= ads.getString("Width");
             AdsSize = ads.getString("Size");
 
@@ -78,8 +78,8 @@ public class eMotoAds {
         return Integer.parseInt(AdsWidth);
     }
 
-    public int getAdsLength(){
-        return Integer.parseInt(AdsLength);
+    public int getAdsHeight(){
+        return Integer.parseInt(AdsHeight);
     }
     public int getAdsSize(){
         return Integer.parseInt(AdsSize);

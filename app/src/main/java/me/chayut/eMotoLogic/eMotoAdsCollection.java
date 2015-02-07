@@ -22,6 +22,8 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class eMotoAdsCollection {
 
+    private static final String TAG = "eMotoAdsCollection";
+
     public eMotoCell eMotoCell;
     public Map<String,eMotoAds> adsHashMap =  new HashMap<String,eMotoAds>();
 
@@ -68,7 +70,7 @@ public class eMotoAdsCollection {
             c.connect();
             int status = c.getResponseCode();
 
-            Log.d("Application:", String.format("http-response:%3d", status));
+            Log.d(TAG, String.format("http-response:%3d", status));
             switch (status) {
 
                 case 200:

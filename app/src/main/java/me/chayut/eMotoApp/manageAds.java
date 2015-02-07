@@ -20,22 +20,16 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Map;
 
-import me.chayut.eMotoLogic.LogicCallBack;
 import me.chayut.eMotoLogic.eMotoAds;
 import me.chayut.eMotoLogic.eMotoAdsArrayAdapter;
 import me.chayut.eMotoLogic.eMotoAdsCollection;
 import me.chayut.eMotoLogic.eMotoCell;
-import me.chayut.eMotoLogic.eMotoLogic;
 import me.chayut.eMotoLogic.eMotoLoginResponse;
 import me.chayut.eMotoLogic.eMotoService;
 
 
-public class manageAds extends ActionBarActivity implements LogicCallBack {
+public class manageAds extends ActionBarActivity {
 
-
-
-
-    eMotoLogic mLogic = new eMotoLogic(this,this);
     eMotoCell myMotoCell = new eMotoCell();
     eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
     eMotoLoginResponse mLoginResponse;
@@ -52,10 +46,6 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
 
         Intent intent = getIntent();
         mLoginResponse = intent.getExtras().getParcelable("eMotoLoginResponse");
-
-
-        mLogic.startAutoReauthenticate(mLoginResponse);
-
 
          /*
          * Creates an intent filter for DownloadStateReceiver that intercepts broadcast Intents
@@ -84,6 +74,25 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
 
         myAdsCollection.eMotoCell = myMotoCell;
         new getAdsCollectionTask().execute();
+    }
+
+    /*
+    * This callback is invoked when the system is about to destroy the Activity.
+    */
+    @Override
+    public void onDestroy() {
+
+        // If the DownloadStateReceiver still exists, unregister it and set it to null
+        if (mServiceResponseReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mServiceResponseReceiver);
+            mServiceResponseReceiver = null;
+        }
+
+        // Unregisters the FragmentDisplayer instance
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(this.mServiceResponseReceiver);
+
+        // Must always call the super method at the end.
+        super.onDestroy();
     }
 
 
@@ -229,7 +238,7 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
 
         Log.d("Activity","Btn Pressed");
 
-        mLogic.startLocationService();
+        //mLogic.startLocationService();
 
         // use this to start and trigger a service
         Intent i= new Intent(this, eMotoService.class);
@@ -258,11 +267,19 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("Activity","BroadCastReceived");
-        /*
-         * Handle Intents here.
-         */
+            Log.d("Activity","BroadCastReceived: " +intent.getStringExtra(eMotoService.BROADCAST_STATUS));
 
+            switch(intent.getStringExtra(eMotoService.BROADCAST_STATUS)){
+                case eMotoService.RES_TOKEN_UPDATE:
+                    mLoginResponse.token = intent.getStringExtra(eMotoService.RES_TOKEN_UPDATE);
+                    break;
+                case eMotoService.RES_LOCATION_ERROR:
+                case eMotoService.RES_TOKEN_UNAUTHORIZED:
+                case eMotoService.RES_EXCEPTION_ENCOUNTERED:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

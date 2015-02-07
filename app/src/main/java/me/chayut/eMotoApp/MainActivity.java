@@ -1,9 +1,16 @@
 package me.chayut.eMotoApp;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +19,7 @@ import android.view.View;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import me.chayut.eMotoLogic.eMotoLogic;
+
 import me.chayut.eMotoLogic.eMotoLoginResponse;
 import me.chayut.eMotoLogic.eMotoService;
 import me.chayut.eMotoLogic.eMotoUtility;
@@ -20,6 +27,9 @@ import me.chayut.eMotoLogic.eMotoUtility;
 
 public class MainActivity extends ActionBarActivity {
 
+    //Service
+    eMotoService mService;
+    boolean mBound = false;
 
     eMotoLoginResponse mLoginResponse;
     String value = null;
@@ -31,6 +41,8 @@ public class MainActivity extends ActionBarActivity {
 
         Log.d("Application:","onCreate");
 
+        // Bind to LocalService
+        //this.start();
     }
 
 
@@ -114,20 +126,23 @@ public class MainActivity extends ActionBarActivity {
 
     private void loginSuccessful (){
 
-        // start Service
-        Intent i= new Intent(this, eMotoService.class);
+        // use this to start and trigger a service
+        Intent i= new Intent(getApplicationContext(), eMotoService.class);
         // potentially add data to the intent
         i.putExtra("ServiceCMD", eMotoService.CMD_STARTAUTOREAUTHENTICATE);
-        i.putExtra("eMotoLoginResponse", mLoginResponse);
-        this.startService(i);
+        i.putExtra("eMotoLoginResponse",mLoginResponse);
+
+        getApplicationContext().startService(i);
 
 
-        Intent myIntent = new Intent(MainActivity.this, manageAds.class);
+        Intent myIntent = new Intent(getBaseContext(), manageAds.class);
         myIntent.putExtra("eMotoLoginResponse", mLoginResponse); //Optional parameters
 
         MainActivity.this.startActivity(myIntent);
 
+
     }
+
 
 
     private void loginUnauthorizedAlert(){
@@ -136,6 +151,32 @@ public class MainActivity extends ActionBarActivity {
         builder1.setCancelable(true);
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
+
+    protected ServiceConnection mServerConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            Log.d("MainActivity", "onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d("MainActivity", "onServiceDisconnected");
+        }
+    };
+
+    public void start() {
+
+        Intent i= new Intent(MainActivity.this, eMotoService.class);
+        // mContext is defined upper in code, I think it is not necessary to explain what is it
+        MainActivity.this.bindService(i, mServerConn, Context.BIND_AUTO_CREATE);
+
+
+    }
+
+    public void stop() {
+
+        //this.unbindService(mServerConn);
     }
 
 }

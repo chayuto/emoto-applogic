@@ -7,9 +7,9 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.concurrent.ScheduledFuture;
@@ -23,8 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class eMotoService extends Service {
 
     //Debug
-    private final static String Tag = "eMotoService";
-
+    private final static String TAG = "eMotoService";
 
 
     // Defines a custom Intent action
@@ -38,6 +37,8 @@ public class eMotoService extends Service {
     public static final String RES_TOKEN_UPDATE = "RES_TOKEN_UPDATE";
     public static final String RES_TOKEN_UNAUTHORIZED = "RES_TOKEN_UNAUTHORIZED";
 
+    public static final String RES_EXCEPTION_ENCOUNTERED = "RES_EXCEPTION_ENCOUNTERED";
+
     //Public CMD
     public final static String CMD_STARTAUTOREAUTHENTICATE = "CMD_STARTAUTOREAUTHENTICATE";
     public final static String CMD_GETTOKEN = "CMD_GETTOKEN";
@@ -45,33 +46,58 @@ public class eMotoService extends Service {
     public final static String CMD_STOPLOCATIONSERVICE = "CMD_STOPLOCATIONSERVICE";
 
     //LocalVarible
-    eMotoLoginResponse mLoginResponse = new eMotoLoginResponse();
+    eMotoLoginResponse mLoginResponse ;
 
 
     //service Broadcaster
-    eMotoServiceBroadcaster mServiveBroadcaster = new eMotoServiceBroadcaster(this);
+   // eMotoServiceBroadcaster mServiveBroadcaster = new eMotoServiceBroadcaster(this);
 
 
     /** interface for clients that bind */
-    IBinder mBinder;
+    private final IBinder mBinder = new LocalBinder();
+    /** indicates whether onRebind should be used */
+    boolean mAllowRebind = true;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mLoginResponse = new eMotoLoginResponse();
+    }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        Log.d(TAG, "Received start id " + startId + ": " + intent);
 
         String ServiceCMD = intent.getStringExtra("ServiceCMD");
-        Log.d(Tag, ServiceCMD);
+        Log.d(TAG, ServiceCMD);
 
         switch (ServiceCMD){
             case CMD_STARTAUTOREAUTHENTICATE:
                 mLoginResponse = intent.getExtras().getParcelable("eMotoLoginResponse");
-                Log.d(Tag, "Login Credential: " + mLoginResponse.token);
+                if(mLoginResponse != null) {
+                    Log.d(TAG, "Login Credential: " + mLoginResponse.token);
+                    this.startAutoReauthenticate(mLoginResponse);
+                    eMotoServiceBroadcaster.broadcastIntentWithState(RES_TOKEN_UPDATE, this);
+                }
+                else
+                {
+                    Log.d(TAG, "Null Object Reference!");
+                    eMotoServiceBroadcaster.broadcastIntentWithState(RES_EXCEPTION_ENCOUNTERED, this);
+                }
                 break;
             case CMD_GETTOKEN:
-                Log.d(Tag, "Login Credential: " + mLoginResponse.token);
-                mServiveBroadcaster.broadcastIntentWithState(RES_TOKEN_UPDATE);
+                if(mLoginResponse != null) {
+                    Log.d(TAG, "Login Credential: " + mLoginResponse.token);
+                    this.startAutoReauthenticate(mLoginResponse);
+                    eMotoServiceBroadcaster.broadcastIntentWithState(RES_TOKEN_UPDATE, this);
+                }
+                else
+                {
+                    Log.d(TAG, "Null Object Reference!");
+                    eMotoServiceBroadcaster.broadcastIntentWithState(RES_EXCEPTION_ENCOUNTERED, this);
+                }
                 break;
             case CMD_STARTLOCATIONSERVICE:
                 startLocationService();
@@ -80,7 +106,7 @@ public class eMotoService extends Service {
                 stopLocationService();
                 break;
             default:
-                Log.d(Tag, "Service Command Unrecognized");
+                Log.d(TAG, "Service Command Unrecognized");
                 break;
         }
 
@@ -93,6 +119,34 @@ public class eMotoService extends Service {
         return mBinder;
     }
 
+    /** Called when all clients have unbound with unbindService()*/
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return mAllowRebind;
+    }
+
+    /** Called when a client is binding to the service with bindService()*/
+    @Override
+    public void onRebind(Intent intent) {
+
+    }
+
+    /** Called when The service is no longer used and is being destroyed*/
+    @Override
+    public void onDestroy() {
+
+    }
+
+    /**
+     * Class for clients to access.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with
+     * IPC.
+     */
+    public class LocalBinder extends Binder {
+        eMotoService getService() {
+            return eMotoService.this;
+        }
+    }
 
 
     //region Authentication Service
@@ -142,6 +196,7 @@ public class eMotoService extends Service {
         @Override
         public void run() {
             eMotoUtility.performLoginWithLoginResponse(mLoginResponse);
+            eMotoServiceBroadcaster.broadcastNewToken(mLoginResponse.token, eMotoService.this);
             System.out.println("run:" + mLoginResponse.token);
         }
     }

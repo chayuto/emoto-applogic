@@ -30,7 +30,7 @@ import javax.net.ssl.X509TrustManager;
  */
 public class eMotoUtility
 {
-
+    private static final String TAG = "eMotoUtility";
 
     public static eMotoLoginResponse performLogin ( String username, String password){
 
@@ -81,7 +81,7 @@ public class eMotoUtility
             c.connect();
             int status = c.getResponseCode();
 
-            Log.d("Application:", String.format("http-response:%3d", status));
+            Log.d(TAG, String.format("http-response:%3d", status));
             switch (status) {
 
                 case 200:
@@ -96,7 +96,7 @@ public class eMotoUtility
 
                     break;
                 case 401:
-                    Log.d("Application:","login unauthorized");
+                    Log.d(TAG,"login unauthorized");
                     break;
                 default:
 
@@ -179,7 +179,7 @@ public class eMotoUtility
             c.connect();
             int status = c.getResponseCode();
 
-            Log.d("Application:", String.format("http-response:%3d", status));
+            Log.d(TAG, String.format("http-response:%3d", status));
             switch (status) {
 
                 case 200:
@@ -187,7 +187,7 @@ public class eMotoUtility
                     rd  = new BufferedReader(new InputStreamReader(c.getInputStream()));
                     String json = rd.readLine();
                     jArray  = new JSONArray(json);
-                    Log.d("Logic",String.format("JSON Length %d",jArray.length()));
+                    Log.d(TAG,String.format("JSON Length %d",jArray.length()));
 
                     for(int n = 0; n < jArray.length(); n++) {
 
@@ -200,7 +200,7 @@ public class eMotoUtility
                 case 401:
                     rd  = new BufferedReader(new InputStreamReader(c.getErrorStream()));
 
-                    Log.d("Application:","Server unauthorized: " +rd.readLine());
+                    Log.d(TAG,"Server unauthorized: " +rd.readLine());
                     break;
                 default:
 
@@ -241,7 +241,7 @@ public class eMotoUtility
             c.connect();
             int status = c.getResponseCode();
 
-            Log.d("Application:", String.format("http-response:%3d", status));
+            Log.d(TAG, String.format("http-response:%3d", status));
             switch (status) {
 
                 case 200:
@@ -249,7 +249,7 @@ public class eMotoUtility
                     rd  = new BufferedReader(new InputStreamReader(c.getInputStream()));
                     String json = rd.readLine();
                     jArray  = new JSONArray(json);
-                    Log.d("Logic",String.format("JSON Length %d",jArray.length()));
+                    Log.d(TAG,String.format("JSON Length %d",jArray.length()));
 
                     for(int n = 0; n < jArray.length(); n++) {
 
@@ -262,7 +262,7 @@ public class eMotoUtility
                 case 401:
                     rd  = new BufferedReader(new InputStreamReader(c.getErrorStream()));
 
-                    Log.d("Application:","Server unauthorized: " +rd.readLine());
+                    Log.d(TAG,"Server unauthorized: " +rd.readLine());
                     break;
                 default:
 
@@ -311,7 +311,7 @@ public class eMotoUtility
                     rd  = new BufferedReader(new InputStreamReader(c.getInputStream()));
                     String json = rd.readLine();
                     jArray  = new JSONArray(json);
-                    Log.d("Logic",String.format("JSON Length %d",jArray.length()));
+                    Log.d(TAG,String.format("JSON Length %d",jArray.length()));
 
                     for(int n = 0; n < jArray.length(); n++) {
 
@@ -324,7 +324,7 @@ public class eMotoUtility
                 case 401:
                     rd  = new BufferedReader(new InputStreamReader(c.getErrorStream()));
 
-                    Log.d("Application:","Server unauthorized: " +rd.readLine());
+                    Log.d(TAG,"Server unauthorized: " +rd.readLine());
                     break;
                 default:
 

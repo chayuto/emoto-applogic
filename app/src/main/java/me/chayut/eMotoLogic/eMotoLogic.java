@@ -23,15 +23,13 @@ public class eMotoLogic {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private String provider;
-    private LogicCallBack logicCB;
     private Context mContext;
 
 
 
 
-    public eMotoLogic(Context mContext,LogicCallBack callback){
+    public eMotoLogic(Context mContext){
         this.mContext = mContext;
-        this.logicCB = callback;
     }
 
     public void startAutoReauthenticate (eMotoLoginResponse mLoginResponse) {
@@ -82,14 +80,13 @@ public class eMotoLogic {
 
     public void startLocationService()
     {
-        logicCB.toastOnUI("Location Service Started");
+
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.d("Location",location.toString());
-                logicCB.toastOnUI(String.format("Location: %f, %f : %f", location.getLatitude(),location.getLongitude(),location.getAccuracy()));
-            }
+               }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
                 Log.d("Location","onStatusChanged : " + provider);
