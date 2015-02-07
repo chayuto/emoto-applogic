@@ -12,6 +12,11 @@ public class eMotoAds {
     private String AdsScheduleAssetId;
     private String AdsApprove;
     private String AdsUrl;
+    private String AdsExtension;
+    private String AdsWidth;
+    private String AdsLength;
+    private String AdsSize;
+
 
     public eMotoAds(JSONObject ads)
     {
@@ -29,6 +34,11 @@ public class eMotoAds {
             AdsApprove = ads.getString("Approved");
             AdsScheduleAssetId =ads.getString("ScheduleAssetId");
             AdsUrl =ads.getString("Url");
+            AdsExtension = ads.getString("Extension");
+            AdsLength = ads.getString("Length");
+            AdsWidth= ads.getString("Width");
+            AdsSize = ads.getString("Size");
+
         }
         catch (JSONException ex){
             ex.printStackTrace();
@@ -60,4 +70,19 @@ public class eMotoAds {
 
         return ThumbnailURL;
     }
+
+    public String getAdsExtension(){
+        return AdsExtension;
+    }
+    public int getAdsWidth(){
+        return Integer.parseInt(AdsWidth);
+    }
+
+    public int getAdsLength(){
+        return Integer.parseInt(AdsLength);
+    }
+    public int getAdsSize(){
+        return Integer.parseInt(AdsSize);
+    }
+
 }

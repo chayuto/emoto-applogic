@@ -18,15 +18,19 @@ public class eMotoAssetLibrary {
 
 
     public Bitmap getThumbnail (eMotoAds ads){
+        return this.getThumbnail(ads.id(),ads.getAdsThumbnailURL());
+    }
 
-        Bitmap adsThumbnail = adsHashMap.get(ads.id());
+    public Bitmap getThumbnail (String AdsID, String strAdsThumbnailURL){
+
+        Bitmap adsThumbnail = adsHashMap.get(AdsID);
 
         if (adsThumbnail==null)
         {
             try {
-                URL imageURL = new URL(ads.getAdsThumbnailURL());
+                URL imageURL = new URL(strAdsThumbnailURL);
                 adsThumbnail = BitmapFactory.decodeStream(imageURL.openStream());
-                adsHashMap.put(ads.id(),adsThumbnail);
+                adsHashMap.put(AdsID,adsThumbnail);
             }
             catch (MalformedURLException ex)
             {
@@ -39,6 +43,8 @@ public class eMotoAssetLibrary {
         }
         return adsThumbnail;
     }
+
+
 
     public void clearAssetLibrary(){
         adsHashMap.clear();
