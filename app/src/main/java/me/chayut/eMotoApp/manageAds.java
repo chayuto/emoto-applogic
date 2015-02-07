@@ -1,8 +1,12 @@
 package me.chayut.eMotoApp;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,9 +27,12 @@ import me.chayut.eMotoLogic.eMotoAdsCollection;
 import me.chayut.eMotoLogic.eMotoCell;
 import me.chayut.eMotoLogic.eMotoLogic;
 import me.chayut.eMotoLogic.eMotoLoginResponse;
+import me.chayut.eMotoLogic.eMotoService;
 
 
 public class manageAds extends ActionBarActivity implements LogicCallBack {
+
+
 
 
     eMotoLogic mLogic = new eMotoLogic(this,this);
@@ -33,7 +40,7 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
     eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
     eMotoLoginResponse mLoginResponse;
 
-
+    ServiceResponseReceiver mServiceResponseReceiver;
 
     //ads array for ListView
     private ArrayList<eMotoAds> adsArray = new ArrayList<eMotoAds>();
@@ -46,7 +53,30 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
         Intent intent = getIntent();
         mLoginResponse = intent.getExtras().getParcelable("eMotoLoginResponse");
 
+
         mLogic.startAutoReauthenticate(mLoginResponse);
+
+
+         /*
+         * Creates an intent filter for DownloadStateReceiver that intercepts broadcast Intents
+         */
+
+        // The filter's action is BROADCAST_ACTION
+        IntentFilter statusIntentFilter = new IntentFilter(
+                eMotoService.BROADCAST_ACTION);
+
+        // Sets the filter's category to DEFAULT
+        statusIntentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+
+        // Instantiates a new DownloadStateReceiver
+        mServiceResponseReceiver = new ServiceResponseReceiver();
+
+        // Registers the DownloadStateReceiver and its intent filters
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mServiceResponseReceiver,
+                statusIntentFilter);
+
+
 
         myMotoCell.deviceID = "00000000";
         myMotoCell.deviceLatitude = "-33.7238297";
@@ -200,6 +230,12 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
         Log.d("Activity","Btn Pressed");
 
         mLogic.startLocationService();
+
+        // use this to start and trigger a service
+        Intent i= new Intent(this, eMotoService.class);
+        // potentially add data to the intent
+        i.putExtra("ServiceCMD", eMotoService.CMD_GETTOKEN);
+        this.startService(i);
     }
 
     //Call back functions
@@ -211,6 +247,25 @@ public class manageAds extends ActionBarActivity implements LogicCallBack {
         Toast.makeText(getApplicationContext(),toastMessage,
                 Toast.LENGTH_SHORT).show();
     }
+
+
+    private class ServiceResponseReceiver extends BroadcastReceiver
+    {
+        // Prevents instantiation
+        private ServiceResponseReceiver() {
+        }
+        // Called when the BroadcastReceiver gets an Intent it's registered to receive
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d("Activity","BroadCastReceived");
+        /*
+         * Handle Intents here.
+         */
+
+        }
+    }
+
 
 
 }

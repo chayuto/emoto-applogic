@@ -4,11 +4,30 @@
 #
 #################################
 
+#Sections
+
+##Ads Managements:
+eMotoAds, eMotoAdsCollection, eMotoAssetLibrary
+
+
+##eMoto Background Service: (under development)
+###Background Service handles all background Processes
+-keeping track of the eMotoCell device and upload to server
+-update authentication token in background
+-handle bluetooth communications
+
+###Usage Note:
+-eMotoService is running in background by default throughout application lifetime
+-Activities call call service API via using Intent with commands.
+-some command will require to take Extras as input perimeters
+-Activities can listen to the response from the eMotoService via implimenting BroadcaseListener
+
+#API Calls
 Note:
 Network - method should not be call in main Thread, use ASync Task or launch new Thread
 Background - method spawn new background worker thread, method should not be called multiple times
 
-##eMotoLogic Class:
+##eMotoLogic Class: (Deprecated)
 need to implementation of 'LogicCallBack' interface class in Activity.
 
     //constructor
@@ -21,7 +40,7 @@ need to implementation of 'LogicCallBack' interface class in Activity.
     public void startLocationService();
     public void stopLocationService();
 
-##LogicCallBack Interface Class:
+##LogicCallBack Interface Class:  (Deprecated)
 
     public void logicCallback ();
     public void toastOnUI (String toastMessage);

@@ -44,7 +44,7 @@ public class eMotoLogic {
             RunnableThread runThread = new RunnableThread();
             runThread.mLoginResponse = mLoginResponse;
             int delay = Integer.parseInt(mLoginResponse.idle);
-            stpe.execute(runThread);
+            //stpe.execute(runThread);
 
             //starts callable thread that will start after delay minutes
             ScheduledFuture sf = stpe.scheduleAtFixedRate(runThread,delay,delay,

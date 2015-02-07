@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import me.chayut.eMotoLogic.eMotoLogic;
 import me.chayut.eMotoLogic.eMotoLoginResponse;
+import me.chayut.eMotoLogic.eMotoService;
 import me.chayut.eMotoLogic.eMotoUtility;
 
 
@@ -112,6 +113,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void loginSuccessful (){
+
+        // start Service
+        Intent i= new Intent(this, eMotoService.class);
+        // potentially add data to the intent
+        i.putExtra("ServiceCMD", eMotoService.CMD_STARTAUTOREAUTHENTICATE);
+        i.putExtra("eMotoLoginResponse", mLoginResponse);
+        this.startService(i);
+
 
         Intent myIntent = new Intent(MainActivity.this, manageAds.class);
         myIntent.putExtra("eMotoLoginResponse", mLoginResponse); //Optional parameters
