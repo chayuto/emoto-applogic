@@ -59,14 +59,16 @@ public class eMotoService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG,"onCreate()");
         mLoginResponse = new eMotoLoginResponse();
     }
+
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d(TAG, "Received start id " + startId + ": " + intent);
+        Log.d(TAG, "onStartCommand() id: " + startId + ": " + intent);
 
         String ServiceCMD = intent.getStringExtra("ServiceCMD");
         Log.d(TAG, ServiceCMD);
@@ -132,7 +134,7 @@ public class eMotoService extends Service {
     /** Called when The service is no longer used and is being destroyed*/
     @Override
     public void onDestroy() {
-
+        Log.d(TAG,"onDestroy()");
     }
 
     /**

@@ -3,23 +3,20 @@
     package="me.chayut.eMotoApp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/em_logo_sq"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <service
             android:name="me.chayut.eMotoLogic.eMotoService"
-            android:label="eMotoService"
-            >
+            android:label="eMotoService" >
         </service>
 
-
         <activity
-            android:name="me.chayut.eMotoApp.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,20 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
-            android:name="me.chayut.eMotoApp.manageAds"
+            android:name=".manageAds"
             android:label="@string/title_activity_manage_ads"
-            android:parentActivityName="me.chayut.eMotoApp.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.chayut.eMotoApp.MainActivity" />
         </activity>
-
-
-
-
+        <activity
+            android:name=".Menu1"
+            android:label="@string/title_activity_menu1" >
+        </activity>
     </application>
-
 
 </manifest>
