@@ -2,6 +2,7 @@ package me.chayut.eMotoLogic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
 
 /**
@@ -41,4 +42,22 @@ public class eMotoServiceBroadcaster {
         // Gets an instance of the support library local broadcastmanager
         LocalBroadcastManager.getInstance(context).sendBroadcast(localIntent);
     }
+
+    static public void broadcastNewLocation(Location location,Context context) {
+
+        Intent localIntent = new Intent();
+
+        // The Intent contains the custom broadcast action for this app
+        localIntent.setAction(eMotoService.BROADCAST_ACTION);
+
+        // Puts the status into the Intent
+        localIntent.putExtra(eMotoService.BROADCAST_STATUS, eMotoService.RES_LOCATION_UPDATE);
+        localIntent.putExtra(eMotoService.RES_LOCATION_UPDATE,location);
+        localIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+        // Gets an instance of the support library local broadcastmanager
+        LocalBroadcastManager.getInstance(context).sendBroadcast(localIntent);
+    }
+
+
 }

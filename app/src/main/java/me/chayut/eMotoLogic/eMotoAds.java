@@ -1,12 +1,15 @@
 package me.chayut.eMotoLogic;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by chayut on 7/01/15.
  */
-public class eMotoAds {
+public class eMotoAds implements Parcelable {
     private String AdsId;
     private String AdsDescription;
     private String AdsScheduleAssetId;
@@ -84,5 +87,50 @@ public class eMotoAds {
     public int getAdsSize(){
         return Integer.parseInt(AdsSize);
     }
+
+
+
+    //region Parcelable
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+
+        out.writeString(AdsId);
+        out.writeString(AdsDescription);
+        out.writeString(AdsApprove);
+        out.writeString(AdsScheduleAssetId);
+        out.writeString(AdsHeight);
+        out.writeString(AdsWidth);
+        out.writeString(AdsSize);
+        out.writeString(AdsUrl);
+        out.writeString(AdsExtension);
+    }
+
+    public static final Parcelable.Creator<eMotoAds> CREATOR
+            = new Parcelable.Creator<eMotoAds>() {
+        public eMotoAds createFromParcel(Parcel in) {
+            return new eMotoAds(in);
+        }
+
+        public eMotoAds[] newArray(int size) {
+            return new eMotoAds[size];
+        }
+    };
+
+    private eMotoAds(Parcel in) {
+        AdsId= in.readString();
+        AdsDescription= in.readString();
+        AdsApprove = in.readString();
+        AdsScheduleAssetId= in.readString();
+        AdsHeight= in.readString();
+        AdsWidth = in.readString();
+        AdsSize = in.readString();
+        AdsUrl = in.readString();
+        AdsExtension = in.readString();
+    }
+
+    //endregion
 
 }

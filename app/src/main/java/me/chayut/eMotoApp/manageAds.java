@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
@@ -245,17 +246,13 @@ public class manageAds extends ActionBarActivity {
         // potentially add data to the intent
         i.putExtra("ServiceCMD", eMotoService.CMD_GETTOKEN);
         this.startService(i);
+
+        i  = new Intent(this, eMotoService.class);
+        i.putExtra("ServiceCMD", eMotoService.CMD_STARTLOCATIONSERVICE);
+        this.startService(i);
+
     }
 
-    //Call back functions
-    public void logicCallback (){
-        Log.d("Activity","Call Back Triggered");
-
-    }
-    public void toastOnUI (String toastMessage){
-        Toast.makeText(getApplicationContext(),toastMessage,
-                Toast.LENGTH_SHORT).show();
-    }
 
 
     private class ServiceResponseReceiver extends BroadcastReceiver
@@ -272,6 +269,12 @@ public class manageAds extends ActionBarActivity {
             switch(intent.getStringExtra(eMotoService.BROADCAST_STATUS)){
                 case eMotoService.RES_TOKEN_UPDATE:
                     mLoginResponse.token = intent.getStringExtra(eMotoService.RES_TOKEN_UPDATE);
+                    Log.d("Activity","New Token: " + mLoginResponse.token);
+                    break;
+                case eMotoService.RES_LOCATION_UPDATE:
+                    Location location = intent.getParcelableExtra(eMotoService.RES_LOCATION_UPDATE);
+                    Toast.makeText(getApplicationContext(),String.format("Location %f %f %f",location.getLatitude(),location.getLongitude(),location.getAccuracy()),
+                            Toast.LENGTH_SHORT).show();
                     break;
                 case eMotoService.RES_LOCATION_ERROR:
                 case eMotoService.RES_TOKEN_UNAUTHORIZED:

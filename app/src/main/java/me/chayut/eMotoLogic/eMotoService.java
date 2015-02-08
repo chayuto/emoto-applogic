@@ -26,17 +26,15 @@ public class eMotoService extends Service {
     private final static String TAG = "eMotoService";
 
 
-    // Defines a custom Intent action
+    // Defines Intent action
     public static final String BROADCAST_ACTION = "com.emotovate.android.eMotoApp.BROADCAST";
     public static final String BROADCAST_STATUS = "com.emotovate.android.eMotoApp.STATUS";
 
     //Public RESPONSE
     public static final String RES_LOCATION_UPDATE = "RES_LOCATION_UPDATE";
     public static final String RES_LOCATION_ERROR = "RES_LOCATION_ERROR";
-
     public static final String RES_TOKEN_UPDATE = "RES_TOKEN_UPDATE";
     public static final String RES_TOKEN_UNAUTHORIZED = "RES_TOKEN_UNAUTHORIZED";
-
     public static final String RES_EXCEPTION_ENCOUNTERED = "RES_EXCEPTION_ENCOUNTERED";
 
     //Public CMD
@@ -214,42 +212,49 @@ public class eMotoService extends Service {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private String locationProvider;
+    private boolean locationServiceIsRunning = false;
 
     private void startLocationService()
     {
-        // Define a listener that responds to location updates
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                Log.d("Location",location.toString());
-                //Toast.toastOnUI(String.format("Location: %f, %f : %f", location.getLatitude(), location.getLongitude(), location.getAccuracy()));
-            }
+        Log.d(TAG, "startLocationService()");
+        //if(!locationServiceIsRunning) {
+            // Define a listener that responds to location updates
+            locationListener = new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    // Called when a new location is found by the network location provider.
+                    Log.d(TAG, location.toString());
+                    eMotoServiceBroadcaster.broadcastNewLocation(location, eMotoService.this);
+                    //Toast.toastOnUI(String.format("Location: %f, %f : %f", location.getLatitude(), location.getLongitude(), location.getAccuracy()));
+                }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-                Log.d("Location","onStatusChanged : " + provider);
-            }
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                    Log.d("Location", "onStatusChanged : " + provider);
+                }
 
-            public void onProviderEnabled(String provider) {}
+                public void onProviderEnabled(String provider) {
+                }
 
-            public void onProviderDisabled(String provider) {}
-        };
-        // Get the location manager
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+                public void onProviderDisabled(String provider) {
+                }
+            };
+            // Get the location manager
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        // Define the criteria how to select the locatioin provider -> use
-        // default
-        Criteria criteria = new Criteria();
-        locationProvider = locationManager.getBestProvider(criteria, false);
-        Location location = locationManager.getLastKnownLocation(locationProvider);
+            // Define the criteria how to select the locatioin provider -> use
+            // default
+            Criteria criteria = new Criteria();
+            locationProvider = locationManager.getBestProvider(criteria, false);
+            Location location = locationManager.getLastKnownLocation(locationProvider);
 
-        // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);//.NETWORK_PROVIDER,.GPS_PROVIDER
-
+            // Register the listener with the Location Manager to receive location updates
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);//.NETWORK_PROVIDER,.GPS_PROVIDER
+            locationServiceIsRunning = true;
+        //}
     }
 
     private void stopLocationService(){
         locationManager.removeUpdates(locationListener);
-
+        locationServiceIsRunning =false;
     }
 
 
