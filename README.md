@@ -82,16 +82,18 @@ eMotoAds, eMotoAdsCollection, eMotoAssetLibrary
     public String credential; //temporary, unsafe
 
 ##eMotoAdsCollection Class:
+  *set eMotoCell before calling getAdsCollection (String token)
 
     //properties 
     public eMotoCell eMotoCell;
-    public String token;
     public Map<String,eMotoAds> adsHashMap =  new HashMap<String,eMotoAds>();
 
     //methods
-    public eMotoAds getAdsWithId (String id);
-    public boolean removeAdsWithId (String id);
     public void getAdsCollection (String token)  //<Network>
+
+    public eMotoAds getAdsWithId (String id); // manipulate local Hashmap only
+    public boolean removeAdsWithId (String id); // manipulate local Hashmap only
+
     public boolean approveAdsWithID(String adsID,String token); //<Network>
     public boolean unapproveAdsWithID(String adsID,String token); //<Network>
 
