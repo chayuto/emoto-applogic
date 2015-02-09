@@ -1,17 +1,30 @@
 package me.chayut.eMotoApp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.Location;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
+
+import me.chayut.eMotoLogic.eMotoAdsCollection;
+import me.chayut.eMotoLogic.eMotoCell;
+import me.chayut.eMotoLogic.eMotoLoginResponse;
+import me.chayut.eMotoLogic.eMotoService;
 
 
 public class Menu1 extends ActionBarActivity
@@ -27,6 +40,12 @@ public class Menu1 extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    //eMoto
+    eMotoCell myMotoCell = new eMotoCell();
+    eMotoAdsCollection myAdsCollection = new eMotoAdsCollection();
+    eMotoLoginResponse mLoginResponse;
+    ServiceResponseReceiver mServiceResponseReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +55,50 @@ public class Menu1 extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
+
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        Intent intent = getIntent();
+        mLoginResponse = intent.getExtras().getParcelable("eMotoLoginResponse");
+
+        // The filter's action is BROADCAST_ACTION
+        IntentFilter statusIntentFilter = new IntentFilter(
+                eMotoService.BROADCAST_ACTION);
+
+        // Sets the filter's category to DEFAULT
+        statusIntentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+
+        // Instantiates a new DownloadStateReceiver
+        mServiceResponseReceiver = new ServiceResponseReceiver();
+
+        // Registers the DownloadStateReceiver and its intent filters
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mServiceResponseReceiver,
+                statusIntentFilter);
+
+
+
+        myMotoCell.deviceID = "00000000";
+        myMotoCell.deviceLatitude = "-33.7238297";
+        myMotoCell.deviceLongitude = "151.1220244";
+
+        myAdsCollection.eMotoCell = myMotoCell;
+
+        //Start Service
+
+        // use this to start and trigger a service
+        Intent i= new Intent(this, eMotoService.class);
+        // potentially add data to the intent
+        i.putExtra("ServiceCMD", eMotoService.CMD_GETTOKEN);
+        this.startService(i);
+
+        i  = new Intent(this, eMotoService.class);
+        i.putExtra("ServiceCMD", eMotoService.CMD_STARTLOCATIONSERVICE);
+        this.startService(i);
+
     }
 
     @Override
@@ -138,6 +197,37 @@ public class Menu1 extends ActionBarActivity
             super.onAttach(activity);
             ((Menu1) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
+    private class ServiceResponseReceiver extends BroadcastReceiver
+    {
+        // Prevents instantiation
+        private ServiceResponseReceiver() {
+        }
+        // Called when the BroadcastReceiver gets an Intent it's registered to receive
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d("Activity", "BroadCastReceived: " + intent.getStringExtra(eMotoService.BROADCAST_STATUS));
+
+            switch(intent.getStringExtra(eMotoService.BROADCAST_STATUS)){
+                case eMotoService.RES_TOKEN_UPDATE:
+                    mLoginResponse.token = intent.getStringExtra(eMotoService.RES_TOKEN_UPDATE);
+                    Log.d("Activity","New Token: " + mLoginResponse.token);
+                    break;
+                case eMotoService.RES_LOCATION_UPDATE:
+                    Location location = intent.getParcelableExtra(eMotoService.RES_LOCATION_UPDATE);
+                    Toast.makeText(getApplicationContext(), String.format("Location %f %f %f", location.getLatitude(), location.getLongitude(), location.getAccuracy()),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case eMotoService.RES_LOCATION_ERROR:
+                case eMotoService.RES_TOKEN_UNAUTHORIZED:
+                case eMotoService.RES_EXCEPTION_ENCOUNTERED:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

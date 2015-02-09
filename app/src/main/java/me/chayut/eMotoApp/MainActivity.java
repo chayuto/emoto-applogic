@@ -135,9 +135,9 @@ public class MainActivity extends ActionBarActivity {
 
         getApplicationContext().startService(i);
 
-
-        Intent myIntent = new Intent(getBaseContext(), manageAds.class);
-        myIntent.putExtra("eMotoLoginResponse", mLoginResponse); //Optional parameters
+        Intent myIntent = new Intent(getBaseContext(), Menu1.class);
+       // Intent myIntent = new Intent(getBaseContext(), manageAds.class);
+        myIntent.putExtra("eMotoLoginResponse", mLoginResponse); //pass login perimeter to the new activity
 
         MainActivity.this.startActivity(myIntent);
 
