@@ -1,16 +1,13 @@
 package me.chayut.eMotoApp;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
 
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +17,10 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 
+import org.json.JSONArray;
+
+import me.chayut.eMotoLogic.eMotoAds;
+import me.chayut.eMotoLogic.eMotoCell;
 import me.chayut.eMotoLogic.eMotoLoginResponse;
 import me.chayut.eMotoLogic.eMotoService;
 import me.chayut.eMotoLogic.eMotoUtility;
@@ -93,8 +94,15 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(Object... prams) {
             try {
-                eMotoUtility.getCountryDataFromServer();
+
+
                 mLoginResponse = eMotoUtility.performLogin(username, password);
+
+                JSONArray deviceArray = eMotoUtility.getDeviceListFromServer(mLoginResponse.token);
+                for(int n = 0; n < deviceArray.length(); n++) {
+                    eMotoCell myCell = new eMotoCell(deviceArray.getJSONObject(n));
+                   Log.d("Debug",String.format("DevID:%s DevName:%s",myCell.deviceID,myCell.deviceName));
+                }
 
                 return "put the background thread function here";
             } catch (Exception ex) {
@@ -135,8 +143,8 @@ public class MainActivity extends ActionBarActivity {
 
         getApplicationContext().startService(i);
 
-        Intent myIntent = new Intent(getBaseContext(), Menu1.class);
-       // Intent myIntent = new Intent(getBaseContext(), manageAds.class);
+        //Intent myIntent = new Intent(getBaseContext(), AdsManagement.class);
+       Intent myIntent = new Intent(getBaseContext(), manageAds.class);
         myIntent.putExtra("eMotoLoginResponse", mLoginResponse); //pass login perimeter to the new activity
 
         MainActivity.this.startActivity(myIntent);

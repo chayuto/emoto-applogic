@@ -33,8 +33,12 @@
                 android:value="me.chayut.eMotoApp.MainActivity" />
         </activity>
         <activity
-            android:name=".Menu1"
+            android:name=".AdsMangement_Activity"
             android:label="@string/title_activity_menu1" >
+        </activity>
+        <activity
+            android:name=".AdsManagement"
+            android:label="@string/title_activity_ads_management" >
         </activity>
     </application>
 

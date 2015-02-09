@@ -2,6 +2,9 @@ package me.chayut.eMotoLogic;
 
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,8 +19,30 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class eMotoCell {
     public String deviceID;
+    public String deviceName;
+    public String eMotocellSerialNo;
     public String deviceLatitude;
     public String deviceLongitude;
+
+    public eMotoCell(JSONObject cell)
+    {
+        setCellProperty(cell);
+    }
+    public eMotoCell(){
+
+    }
+
+    private void setCellProperty(JSONObject cell)
+    {
+        try {
+            deviceID= cell.getString("DeviceId");
+            deviceName = cell.getString("DeviceName");
+            eMotocellSerialNo = cell.getString("eMotocellSerialNo");
+        }
+        catch (JSONException ex){
+            ex.printStackTrace();
+        }
+    }
 
     //region network connection
     public void putDeviceOnServer (String token) {

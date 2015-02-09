@@ -68,6 +68,8 @@ eMotoAds, eMotoAdsCollection, eMotoAssetLibrary
     public static JSONArray getCountryDataFromServer (); //<Network>
     public static JSONArray getCityDataFromServer (String countryIDorShortName); //<Network>
     public static JSONArray getZoneDataFromServer (String cityId); //<Network>
+
+    public static JSONArray getDeviceListFromServer (String token)//<Network>
     ```
 
 ##eMotoLoginResponse Class <implements parcelable>:
@@ -113,8 +115,13 @@ eMotoAds, eMotoAdsCollection, eMotoAssetLibrary
 
 ##eMotoCell Class:
 
+    //Constructor
+    public eMotoCell(JSONObject cell);
+
     //property
     public String deviceID;
+    public String deviceName;
+    public String eMotocellSerialNo;
     public String deviceLatitude;
     public String deviceLongitude;
 
